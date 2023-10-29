@@ -2,8 +2,6 @@
 """
 Creation of a variable app(using flask)
 """
-
-
 from flask import Flask, jsonify
 from werkzeug.exceptions import NotFound
 from models import storage
@@ -19,7 +17,7 @@ app.url_map.strict_slashes = False
 def downtear(self):
     """A method to handle the app
     teardown"""
-    storage.close()
+    return storage.close()
 
 
 @app.errorhandler(NotFound)
