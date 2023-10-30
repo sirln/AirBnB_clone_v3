@@ -41,11 +41,11 @@ def delete_user(user_id):
 def create_user():
     data = request.get_json()
     if not data:
-        return jsonify({"error": "Not a JSON"}), 400
+        return abort(400, {"error": "Not a JSON"})
     if 'email' not in data:
-        return jsonify({"error": "Missing email"}), 400
+        return abort(400, {"error": "Missing email"})
     if 'password' not in data:
-        return jsonify({"error": "Missing password"}), 400
+        return abort(400, {"error": "Missing password"})
     user = User(**data)
     user.save()
     return jsonify(user.to_dict()), 201
@@ -59,9 +59,9 @@ def update_user(user_id):
         abort(404)
     data = request.get_json()
     if not data:
-        return jsonify({"error": "Not a JSON"}), 400
+        return abort(400, {"error": "Not a JSON"})
     for key, value in data.items():
         if key not in ['id', 'email', 'created_at', 'updated_at']:
             setattr(user, key, value)
-    user.save()
+    storage.save()
     return jsonify(user.to_dict()), 200
