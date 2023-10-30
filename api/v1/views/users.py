@@ -9,14 +9,16 @@ from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 
 
-@app_views.route('/api/v1/users', methods=['GET'])
+@app_views.route('/users', methods=['GET'],
+                 strict_slashes=False)
 def get_users():
     users_list = storage.all('User').values()
     users = [user.to_dict() for user in users_list]
     return jsonify(users)
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['GET'])
+@app_views.route('/users/<user_id>', methods=['GET'],
+                 strict_slashes=False)
 def get_user(user_id):
     user = storage.get('User', user_id)
     if not user:
@@ -24,7 +26,8 @@ def get_user(user_id):
     return jsonify(user.to_dict())
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['DELETE'])
+@app_views.route('/users/<user_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def delete_user(user_id):
     user = storage.get('User', user_id)
     if not user:
@@ -34,7 +37,7 @@ def delete_user(user_id):
     return jsonify({}), 200
 
 
-@app_views.route('/api/v1/users', methods=['POST'])
+@app_views.route('/users', methods=['POST'], strict_slashes=False)
 def create_user():
     data = request.get_json()
     if not data:
@@ -48,7 +51,8 @@ def create_user():
     return jsonify(user.to_dict()), 201
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['PUT'])
+@app_views.route('/users/<user_id>', methods=['PUT'],
+                 strict_slashes=False)
 def update_user(user_id):
     user = storage.get('User', user_id)
     if not user:
