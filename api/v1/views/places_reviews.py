@@ -14,10 +14,10 @@ from flask import Flask, jsonify, abort, request
 @app_views.route('/places/<place_id>/reviews', methods=['GET'],
                  strict_slashes=False)
 def get_reviews(place_id):
-    place = storage.get('Place', place_id)
+    place = storage.get(Place, place_id)
     if not place:
         abort(404)
-    reviews_list = storage.all('Review').values()
+    reviews_list = storage.all(Review).values()
     reviews = [review.to_dict() for review in reviews_list
                if review.place_id == place_id]
     return jsonify(reviews)
@@ -26,7 +26,7 @@ def get_reviews(place_id):
 @app_views.route('/reviews/<review_id>', methods=['GET'],
                  strict_slashes=False)
 def get_review(review_id):
-    review = storage.get('Review', review_id)
+    review = storage.get(Review, review_id)
     if not review:
         abort(404)
     return jsonify(review.to_dict())
@@ -35,7 +35,7 @@ def get_review(review_id):
 @app_views.route('/reviews/<review_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_review(review_id):
-    review = storage.get('Review', review_id)
+    review = storage.get(Review, review_id)
     if not review:
         abort(404)
     storage.delete(review)
@@ -46,7 +46,7 @@ def delete_review(review_id):
 @app_views.route('/places/<place_id>/reviews', methods=['POST'],
                  strict_slashes=False)
 def create_review(place_id):
-    place = storage.get('Place', place_id)
+    place = storage.get(Place, place_id)
     if not place:
         abort(404)
     data = request.get_json()
@@ -56,7 +56,7 @@ def create_review(place_id):
         return jsonify({"error": "Missing user_id"}), 400
     if 'text' not in data:
         return jsonify({"error": "Missing text"}), 400
-    user = storage.get('User', data['user_id'])
+    user = storage.get(User, data['user_id'])
     if not user:
         abort(404)
     data['place_id'] = place_id
@@ -68,7 +68,7 @@ def create_review(place_id):
 @app_views.route('/reviews/<review_id>', methods=['PUT'],
                  strict_slashes=False)
 def update_review(review_id):
-    review = storage.get('Review', review_id)
+    review = storage.get(Review, review_id)
     if not review:
         abort(404)
     data = request.get_json()
