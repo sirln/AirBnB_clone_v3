@@ -13,26 +13,25 @@ from models.state import State
 def get_cities_by_state(state_id):
     """Method that retrieves all city objects
     of a state"""
-    state_obj = storage.get(State, state_id)
-    if state_obj is None:
+    state = storage.get(State, state_id)
+    if state is None:
         abort(404)
     cities = [city.to_dict() for city in state.cities]
     return jsonify(cities)
 
 
-@app_views.route('/cities/<city_id>/cities', methods=['GET'],
+@app_views.route('/cities/<city_id>', methods=['GET'],
                  strict_slashes=False)
 def get_city_obj(city_id):
     """Method that retrieves a particular city
     object using its id"""
-    city_obj = storage.get(City, city_id)
-    if city_obj:
-        return jsonify(city_obj.to_dict())
-    else:
+    city = storage.get(City, city_id)
+    if not city:
         abort(404)
+    return jsonify(city.to_dict())
 
 
-@app_views.route('/cities/<city_id>/cities', methods=['DELETE'],
+@app_views.route('/cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_city_obj(city_id):
     """Method that deletes a particular city object
@@ -54,9 +53,9 @@ def create_city_obj(state_id):
     state_obj = storage.get(State, state_id)
     if state_obj is None:
         abort(404)
-    if not request.get_json():
-        abort(400, 'Not a JSON')
     response = request.get_json()
+    if not response:
+        abort(400, 'Not a JSON')
     if "name" not in response:
         abort(400, 'Missing name')
     response['state_id'] = state_id
@@ -72,9 +71,9 @@ def update_city_obj(city_id):
     specific city_id"""
     city_obj = storage.get(City, city_id)
     if city_obj:
-        if not request.get_json():
-            abort(400, 'Not a JSON')
         response = request.get_json()
+        if not response:
+            abort(400, 'Not a JSON')
         ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
         for key, value in response.items():
             if key not in ignore_keys:
@@ -83,15 +82,3 @@ def update_city_obj(city_id):
         return jsonify(city_obj.to_dict()), 200
     else:
         abort(404)
-
-
-@app_views.errorhandler(404)
-def not_found(error):
-    """Method that handles 404: Not Found"""
-    return jsonify({'error': 'Not found'}), 404
-
-
-def bad_request(error):
-    """Method that returns bad requests message
-    for illegal requests to API"""
-    return jsonify({'error': 'Bad Request'}), 400
