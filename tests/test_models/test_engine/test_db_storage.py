@@ -68,26 +68,26 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
+class TestDBStorage(unittest.TestCase):
     """Test the FileStorage class"""
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
         self.assertIs(type(models.storage.all()), dict)
 
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
 
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
 
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    # @unittest.skipIf(models.storage_t != 'db', "testing file storage")
+    @unittest.skipIf(models.storage_t != 'db', "testing file storage")
     def test_get(self):
         """Test for the get method"""
         obj = State(name='State')
@@ -97,7 +97,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertIs(get_obj, obj)
         self.assertIsNone(models.storage.get(State, "bad_id"))
 
-    # @unittest.skipIf(models.storage_t != 'db', "testing file storage")
+    @unittest.skipIf(models.storage_t != 'db', "testing file storage")
     def test_count(self):
         """Test for the count method"""
         all_objects = len(models.storage.all())
