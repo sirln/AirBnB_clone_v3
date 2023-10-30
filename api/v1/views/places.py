@@ -3,11 +3,15 @@
 Module to create Place class view
 To handle all default RESTFul API actions
 '''
+from models import storage
+from models.city import City
+from models.user import User
+from models.place import Place
+from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
-from models import storage, City, User, Place
 
 
-@app.route('/api/v1/cities/<city_id>/places', methods=['GET'])
+@app_views.route('/api/v1/cities/<city_id>/places', methods=['GET'])
 def get_places(city_id):
     city = storage.get('City', city_id)
     if not city:
@@ -18,7 +22,7 @@ def get_places(city_id):
     return jsonify(places)
 
 
-@app.route('/api/v1/places/<place_id>', methods=['GET'])
+@app_views.route('/api/v1/places/<place_id>', methods=['GET'])
 def get_place(place_id):
     place = storage.get('Place', place_id)
     if not place:
@@ -26,7 +30,7 @@ def get_place(place_id):
     return jsonify(place.to_dict())
 
 
-@app.route('/api/v1/places/<place_id>', methods=['DELETE'])
+@app_views.route('/api/v1/places/<place_id>', methods=['DELETE'])
 def delete_place(place_id):
     place = storage.get('Place', place_id)
     if not place:
@@ -36,7 +40,7 @@ def delete_place(place_id):
     return jsonify({}), 200
 
 
-@app.route('/api/v1/cities/<city_id>/places', methods=['POST'])
+@app_views.route('/api/v1/cities/<city_id>/places', methods=['POST'])
 def create_place(city_id):
     city = storage.get('City', city_id)
     if not city:
@@ -57,7 +61,7 @@ def create_place(city_id):
     return jsonify(place.to_dict()), 201
 
 
-@app.route('/api/v1/places/<place_id>', methods=['PUT'])
+@app_views.route('/api/v1/places/<place_id>', methods=['PUT'])
 def update_place(place_id):
     place = storage.get('Place', place_id)
     if not place:

@@ -3,11 +3,15 @@
 Module to create place reviews view
 To handle all default RESTFul API actions
 '''
+from models import storage
+from models.place import Place
+from models.user import User
+from models.review import Review
+from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
-from models import storage, Place, User, Review
 
 
-@app.route('/api/v1/places/<place_id>/reviews', methods=['GET'])
+@app_views.route('/api/v1/places/<place_id>/reviews', methods=['GET'])
 def get_reviews(place_id):
     place = storage.get('Place', place_id)
     if not place:
@@ -18,7 +22,7 @@ def get_reviews(place_id):
     return jsonify(reviews)
 
 
-@app.route('/api/v1/reviews/<review_id>', methods=['GET'])
+@app_views.route('/api/v1/reviews/<review_id>', methods=['GET'])
 def get_review(review_id):
     review = storage.get('Review', review_id)
     if not review:
@@ -26,7 +30,7 @@ def get_review(review_id):
     return jsonify(review.to_dict())
 
 
-@app.route('/api/v1/reviews/<review_id>', methods=['DELETE'])
+@app_views.route('/api/v1/reviews/<review_id>', methods=['DELETE'])
 def delete_review(review_id):
     review = storage.get('Review', review_id)
     if not review:
@@ -36,7 +40,7 @@ def delete_review(review_id):
     return jsonify({}), 200
 
 
-@app.route('/api/v1/places/<place_id>/reviews', methods=['POST'])
+@app_views.route('/api/v1/places/<place_id>/reviews', methods=['POST'])
 def create_review(place_id):
     place = storage.get('Place', place_id)
     if not place:
@@ -57,7 +61,7 @@ def create_review(place_id):
     return jsonify(review.to_dict()), 201
 
 
-@app.route('/api/v1/reviews/<review_id>', methods=['PUT'])
+@app_views.route('/api/v1/reviews/<review_id>', methods=['PUT'])
 def update_review(review_id):
     review = storage.get('Review', review_id)
     if not review:

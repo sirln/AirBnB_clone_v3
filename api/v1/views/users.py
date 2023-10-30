@@ -3,18 +3,20 @@
 Module to create User class view
 To handle all default RESTFul API actions
 '''
+from models import storage
+from models.user import User
+from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
-from models import storage, User
 
 
-@app.route('/api/v1/users', methods=['GET'])
+@app_views.route('/api/v1/users', methods=['GET'])
 def get_users():
     users_list = storage.all('User').values()
     users = [user.to_dict() for user in users_list]
     return jsonify(users)
 
 
-@app.route('/api/v1/users/<user_id>', methods=['GET'])
+@app_views.route('/api/v1/users/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = storage.get('User', user_id)
     if not user:
@@ -22,7 +24,7 @@ def get_user(user_id):
     return jsonify(user.to_dict())
 
 
-@app.route('/api/v1/users/<user_id>', methods=['DELETE'])
+@app_views.route('/api/v1/users/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = storage.get('User', user_id)
     if not user:
@@ -32,7 +34,7 @@ def delete_user(user_id):
     return jsonify({}), 200
 
 
-@app.route('/api/v1/users', methods=['POST'])
+@app_views.route('/api/v1/users', methods=['POST'])
 def create_user():
     data = request.get_json()
     if not data:
@@ -46,7 +48,7 @@ def create_user():
     return jsonify(user.to_dict()), 201
 
 
-@app.route('/api/v1/users/<user_id>', methods=['PUT'])
+@app_views.route('/api/v1/users/<user_id>', methods=['PUT'])
 def update_user(user_id):
     user = storage.get('User', user_id)
     if not user:
