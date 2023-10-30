@@ -11,30 +11,30 @@ from models.state import State
                  strict_slashes=False)
 def all_states():
     """Method that retrieves all state objects"""
-    states = storage.all('State')
+    states = storage.all(State)
     state_list = []
     for state in states.values():
         state_list.append(state.to_dict())
     return jsonify(state_list)
 
 
-@app_views.route('/states/<string:state_id>', methods=['GET'],
+@app_views.route('/states/<state_id>', methods=['GET'],
                  strict_slashes=False)
 def get_state_by_stateid(state_id):
     """Method that retrieves a state object
     using its state id"""
-    state_obj = storage.get('State', state_id)
+    state_obj = storage.get(State, state_id)
     if state_obj is None:
         abort(404)
     return jsonify(state_obj.to_dict())
 
 
-@app_views.route('/states/<string:state_id>', methods=['DELETE'],
+@app_views.route('/states/<state_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_state_obj(state_id):
     """Method that deletes a state object
     using its state id"""
-    state_obj = storage.get('State', state_id)
+    state_obj = storage.get(State, state_id)
     if state_obj is None:
         abort(404)
     storage.delete(state_obj)
