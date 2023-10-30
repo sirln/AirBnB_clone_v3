@@ -12,7 +12,7 @@ from flask import Flask, jsonify, abort, request
 @app_views.route('/users', methods=['GET'],
                  strict_slashes=False)
 def get_users():
-    users_list = storage.all('User').values()
+    users_list = storage.all(User).values()
     users = [user.to_dict() for user in users_list]
     return jsonify(users)
 
@@ -20,7 +20,7 @@ def get_users():
 @app_views.route('/users/<user_id>', methods=['GET'],
                  strict_slashes=False)
 def get_user(user_id):
-    user = storage.get('User', user_id)
+    user = storage.get(User, user_id)
     if not user:
         abort(404)
     return jsonify(user.to_dict())
@@ -29,7 +29,7 @@ def get_user(user_id):
 @app_views.route('/users/<user_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_user(user_id):
-    user = storage.get('User', user_id)
+    user = storage.get(User, user_id)
     if not user:
         abort(404)
     storage.delete(user)
@@ -54,7 +54,7 @@ def create_user():
 @app_views.route('/users/<user_id>', methods=['PUT'],
                  strict_slashes=False)
 def update_user(user_id):
-    user = storage.get('User', user_id)
+    user = storage.get(User, user_id)
     if not user:
         abort(404)
     data = request.get_json()
